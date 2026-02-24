@@ -6,6 +6,8 @@ trigger apextr on Account (before insert) {
         
         try{
             // Task 2. Business Rule
+            List<Account> acclist = new List<Account>([SELECT Id, Name FROM Account]);
+
             for(Account acc : Trigger.new) {
                 if(acc.name == null || acc.name.length()<5) {
                     acc.addError('Account Name must be at least 5 characters long.');
@@ -14,7 +16,7 @@ trigger apextr on Account (before insert) {
                     acc.name = acc.name + ' - Verified';
         }
             }
-            insert Trigger.new;
+            insert acclist;
         } catch(DmlException e) {
             System.debug('Error: ' + e.getMessage());
         }
